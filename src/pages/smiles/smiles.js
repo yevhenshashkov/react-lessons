@@ -16,7 +16,14 @@ class Smile extends React.Component {
                 {id: 5, text: "🤔", votes: 0}
             ],
             showResults: false,
-            winnerShow: false,
+            winner: null,
+        }
+    }
+
+    componentDidMount() {
+        const savedSmiles = localStorage.getItem("smiles");
+        if (savedSmiles) {
+            this.setState({ smiles: JSON.parse(savedSmiles) });
         }
     }
     voteSmiles = (id) => {
@@ -27,38 +34,46 @@ class Smile extends React.Component {
                 }
                 return smile;
             });
+            localStorage.setItem("smiles", JSON.stringify(updatedSmiles));
+            console.log(updatedSmiles)
             return {smiles: updatedSmiles};
         });
     }
     toggleResults = () => {
-        this.setState(prev => ({
-            showResults: !prev.showResults,
-            winnerShow: !prev.showResults ? prev.winnerShow : false,
-        }));
+        this.setState(prev => {
+            const showResults = !prev.showResults;
+            return {
+                showResults,
+                winner: showResults ? this.showWinner(prev.smiles) : null
+            };
+        });
     }
+
     resetVotes = () => {
-        const resetSmiles = this.state.smiles.map (smile => ({
+        const resetSmiles = this.state.smiles.map(smile => ({
             ...smile,
             votes: 0
-        }))
-        this.setState({smiles: resetSmiles, showResults: false, winnerShow: false});
-    }
-    getWinner = () => {
-        const { smiles, winnerShow } = this.state;
-        if (winnerShow || smiles.length === 0) return null;
+        }));
 
+        this.setState({
+            smiles: resetSmiles,
+            showResults: false,
+            winner: null
+        });
+        localStorage.removeItem("smiles");
+    }
+
+    showWinner = (smiles) => {
+        if (smiles.length === 0) return null;
         const maxVotes = Math.max(...smiles.map(smile => smile.votes));
         if (maxVotes === 0) return null;
 
-        const winner = smiles.reduce((max, smile) => {
-            return (smile.votes > max.votes) ? smile : max;
-        }, smiles[0]);
-
-        return winner;
+        return smiles.find(smile => smile.votes === maxVotes);
     }
 
+
     render() {
-        const winner = this.getWinner();
+
         return (
             <div className="contaiter">
                 <VoteHeader/>
@@ -86,13 +101,14 @@ class Smile extends React.Component {
                         </span>
                     </button>
                 </div>
-                {this.state.showResults && winner && (
-                    <div className="winner-block ">
-                        <span className= "winner-text">
-                            Смайлік переможець: {winner.text} — {winner.votes} голосів
+                {this.state.showResults && this.state.winner && (
+                    <div className="winner-block">
+                        <span className="winner-text">
+                            Смайлік переможець: {this.state.winner.text} — {this.state.winner.votes} голосів
                         </span>
                     </div>
                 )}
+
 
             </div>
         )
