@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './Styles.css'
 
 class SmileItem extends React.Component {

@@ -16,6 +16,7 @@ class Smile extends React.Component {
                 {id: 5, text: "🤔", votes: 0}
             ],
             showResults: false,
+            winnerShow: false,
         }
     }
     voteSmiles = (id) => {
@@ -30,25 +31,30 @@ class Smile extends React.Component {
         });
     }
     toggleResults = () => {
-        this.setState(prev => ({ showResults: !prev.showResults }));
+        this.setState(prev => ({
+            showResults: !prev.showResults,
+            winnerShow: !prev.showResults ? prev.winnerShow : false,
+        }));
     }
     resetVotes = () => {
         const resetSmiles = this.state.smiles.map (smile => ({
             ...smile,
             votes: 0
         }))
-        this.setState({smiles: resetSmiles});
+        this.setState({smiles: resetSmiles, showResults: false, winnerShow: false});
     }
     getWinner = () => {
-        const { smiles } = this.state;
-        if (smiles.length === 0) return null;
+        const { smiles, winnerShow } = this.state;
+        if (winnerShow || smiles.length === 0) return null;
 
         const maxVotes = Math.max(...smiles.map(smile => smile.votes));
         if (maxVotes === 0) return null;
 
-        return smiles.reduce((max, smile) => {
+        const winner = smiles.reduce((max, smile) => {
             return (smile.votes > max.votes) ? smile : max;
         }, smiles[0]);
+
+        return winner;
     }
 
     render() {
