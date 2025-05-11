@@ -1,10 +1,10 @@
-import FirstComponent from "./Components/FirstComponent";
+import Index from './pages/smiles/smiles'
 
 function App() {
   return (
-    <div>
-      <FirstComponent/>
-    </div>
+    <>
+      <Index />
+    </>
   );
 }
 
