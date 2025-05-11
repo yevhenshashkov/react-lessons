@@ -64,10 +64,8 @@ class Smile extends React.Component {
     }
 
     showWinner = (smiles) => {
-        if (smiles.length === 0) return null;
         const maxVotes = Math.max(...smiles.map(smile => smile.votes));
         if (maxVotes === 0) return null;
-
         return smiles.find(smile => smile.votes === maxVotes);
     }
 
