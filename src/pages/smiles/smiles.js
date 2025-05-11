@@ -1,6 +1,7 @@
 import React from 'react';
 import SmileList from './components/SmileList';
-import VoteHeader from "./components/Header";
+import VoteHeader from './components/Header';
+import Buttons from './components/Buttons';
 import './components/Styles.css';
 
 class Smile extends React.Component {
@@ -35,18 +36,14 @@ class Smile extends React.Component {
                 return smile;
             });
             localStorage.setItem("smiles", JSON.stringify(updatedSmiles));
-            console.log(updatedSmiles)
             return {smiles: updatedSmiles};
         });
     }
     toggleResults = () => {
-        this.setState(prev => {
-            const showResults = !prev.showResults;
-            return {
-                showResults,
-                winner: showResults ? this.showWinner(prev.smiles) : null
-            };
-        });
+        this.setState(prev => ({
+            showResults: !prev.showResults,
+            winner: !prev.showResults ? this.showWinner(prev.smiles) : null
+            }));
     }
 
     resetVotes = () => {
@@ -54,7 +51,6 @@ class Smile extends React.Component {
             ...smile,
             votes: 0
         }));
-
         this.setState({
             smiles: resetSmiles,
             showResults: false,
@@ -69,36 +65,18 @@ class Smile extends React.Component {
         return smiles.find(smile => smile.votes === maxVotes);
     }
 
-
     render() {
-
         return (
             <div className="contaiter">
                 <VoteHeader/>
-
                 <SmileList
                     smiles={this.state.smiles}
                     voteSmiles={this.voteSmiles}
                 />
-                <div className= "btn-block ">
-                    <button className="result-btn"
-                            onClick = {this.toggleResults}
-                    >
-                    <span className="btn-text">
-                        Show result
-                    </span>
-                    </button>
-
-                    <button
-                        className= "reset-btn"
-                        onClick={this.resetVotes}
-                    >
-                        <span
-                            className="btn-text">
-                            Сбросить голоса
-                        </span>
-                    </button>
-                </div>
+                <Buttons
+                    toggleResults={this.toggleResults}
+                    resetVotes={this.resetVotes}
+                />
                 {this.state.showResults && this.state.winner && (
                     <div className="winner-block">
                         <span className="winner-text">
@@ -106,8 +84,6 @@ class Smile extends React.Component {
                         </span>
                     </div>
                 )}
-
-
             </div>
         )
     }
