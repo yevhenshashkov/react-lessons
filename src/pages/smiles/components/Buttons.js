@@ -1,32 +1,25 @@
 import React from 'react';
 
-class Buttons extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-            <div className= "btn-block ">
-                <button className="result-btn"
-                        onClick = {this.props.toggleResults}
-                >
+export default function Buttons ({toggleResults, resetVotes}) {
+    return (
+        <div className= "btn-block ">
+            <button className="result-btn"
+                    onClick = {toggleResults}
+            >
                     <span className="btn-text">
                         Show result
                     </span>
-                </button>
-
-                <button
-                    className= "reset-btn"
-                    onClick={this.props.resetVotes}
-                >
+            </button>
+            <button
+                className= "reset-btn"
+                onClick={resetVotes}
+            >
                         <span
                             className="btn-text">
                             Сбросить голоса
                         </span>
-                </button>
-            </div>
-        )
-    }
+            </button>
+        </div>
+    )
 }
 
-export default Buttons;

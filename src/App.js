@@ -1,9 +1,8 @@
 import Smile from "./pages/smiles/smiles";
-
 function App() {
   return (
     <>
-      <Smile />
+        <Smile />
     </>
   );
 }

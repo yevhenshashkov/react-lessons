@@ -1,24 +1,15 @@
 import React from 'react';
-import './Styles.css'
+import './Styles.css';
 
-class SmileItem extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    voteResults = () => {
-        this.props.voteSmiles(this.props.smile.id)
-    }
-    render() {
+export default function SmileItem({ smile, voteSmiles }) {
+    const voteResults = () => {
+        voteSmiles(smile.id);
+    };
 
-        return (
-            <div className= "item-block "
-                 onClick={this.voteResults}
-            >
-                <span>{this.props.smile.text}</span>
-                <span> Голосів: {this.props.smile.votes}</span>
-            </div>
-        )
-    }
+    return (
+        <div className="item-block" onClick={voteResults}>
+            <span>{smile.text}</span>
+            <span> Голосів: {smile.votes}</span>
+        </div>
+    );
 }
-
-export default SmileItem;
